@@ -1,7 +1,9 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -15,7 +17,7 @@ public class Main {
     }
 
     private void print(int[] result) {
-        System.out.println(result.length);
+        System.out.println(result.length - 1);
         StringBuilder sb = new StringBuilder();
         for (int elem :
                 result) {
@@ -27,16 +29,30 @@ public class Main {
 
     private int[] countAmount(int numToCountStepsBefore) {
         int[] dynamics = getArrayForDyn(numToCountStepsBefore);
+        int[] paths = new int[numToCountStepsBefore + 1];
         for (int i = 1; i < numToCountStepsBefore; i++) {
             int currentStepAmount = dynamics[i] + 1;
             for (int val :
                     getNewValues(i)) {
                 if ((val <= numToCountStepsBefore) && (dynamics[val] > currentStepAmount)) {
                     dynamics[val] = currentStepAmount;
+                    paths[val] = i;
                 }
             }
         }
-        return new int[dynamics[numToCountStepsBefore]];
+
+        return restoResult(numToCountStepsBefore, dynamics[numToCountStepsBefore], paths);
+    }
+
+    private int[] restoResult(int numToCountStepsBefore, int stepAmount, int[] paths) {
+        int[] result = new int[stepAmount + 1];
+        int restoreIndex = result.length - 1;
+        int curRestoreNumber = numToCountStepsBefore;
+        while (curRestoreNumber != 0) {
+            result[restoreIndex--] = curRestoreNumber;
+            curRestoreNumber = paths[curRestoreNumber];
+        }
+        return result;
     }
 
     private int[] getArrayForDyn(int lastElementIndex) {
