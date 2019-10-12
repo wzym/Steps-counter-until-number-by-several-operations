@@ -11,10 +11,21 @@ public class Main {
     private void run() throws IOException {
         BufferedReader bf = new BufferedReader(new FileReader("Test.txt"));
         int inNumber = Integer.parseInt(bf.readLine());
-        System.out.println(countAmount(inNumber));
+        print(countAmount(inNumber));
     }
 
-    private int countAmount(int numToCountStepsBefore) {
+    private void print(int[] result) {
+        System.out.println(result.length);
+        StringBuilder sb = new StringBuilder();
+        for (int elem :
+                result) {
+            sb.append(elem);
+            sb.append(" ");
+        }
+        System.out.println(sb);
+    }
+
+    private int[] countAmount(int numToCountStepsBefore) {
         int[] dynamics = getArrayForDyn(numToCountStepsBefore);
         for (int i = 1; i < numToCountStepsBefore; i++) {
             int currentStepAmount = dynamics[i] + 1;
@@ -25,7 +36,7 @@ public class Main {
                 }
             }
         }
-        return dynamics[numToCountStepsBefore];
+        return new int[dynamics[numToCountStepsBefore]];
     }
 
     private int[] getArrayForDyn(int lastElementIndex) {
